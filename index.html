@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Page</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script>
-        var codeInput = document.getElementById("code-input");
-        var iframe = document.getElementById("content-iframe");
-        var tries = 0;
-
-        function checkCode() {
-            var code = codeInput.value;
-            if (code === "adamsearlycode") {
-                iframe.style.display = "block";
-                codeInput.style.display = "none";
-            } else {
-                tries++;
-                if (tries >= 3) {
-                    localStorage.setItem("code-disabled", "true");
-                    codeInput.style.display = "none";
-                } else {
-                    alert("Incorrect code. You have " + (3 - tries) + " tries left.");
-                }
-            }
-        }
-    </script>
+	<title>Authentication</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome</h1>
-        <p>Please enter the code to access the content:</p>
-        <input type="text" id="code-input">
-        <button onclick="checkCode()">Submit</button>
-        <iframe id="content-iframe" src="https://www.example.com"></iframe>
-    </div>
+	<h1>Enter Code to Access Content</h1>
+	<p>You have 3 attempts to enter the correct code. After that, you will be locked out.</p>
+	<div id="code-input">
+		<label for="code">Enter Code:</label>
+		<input type="password" id="code" name="code">
+		<button onclick="checkCode()">Submit</button>
+	</div>
+	<div id="content" style="display: none;">
+		<h2>Access Granted</h2>
+		<p>You can now view the content below:</p>
+		<iframe src="https://wireguy6.github.io/InternetUnleashed/index.html"></iframe>
+	</div>
+	<script>
+		let attemptsLeft = 3;
+
+		function checkCode() {
+			let code = document.getElementById("code").value;
+			if (code === "adamsearlycode") {
+				document.getElementById("code-input").style.display = "none";
+				document.getElementById("content").style.display = "block";
+			} else {
+				attemptsLeft--;
+				if (attemptsLeft === 0) {
+					localStorage.setItem("lockedOut", "true");
+					alert("You have been locked out.");
+					document.getElementById("code-input").style.display = "none";
+				} else {
+					alert("Incorrect code. You have " + attemptsLeft + " attempts left.");
+				}
+			}
+		}
+
+		// Check if user is locked out
+		if (localStorage.getItem("lockedOut") === "true") {
+			document.getElementById("code-input").style.display = "none";
+			alert("You have been locked out.");
+		}
+	</script>
 </body>
 </html>
