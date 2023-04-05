@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Code Input Example</title>
-	<script>
-		function checkCode() {
-			// Get the code input element
-			var codeInput = document.getElementById("code-input");
-			
-			// Get the code entered by the user
-			var enteredCode = codeInput.value;
-			
-			// Check if the code is correct
-			if (enteredCode == "adamsearlycode") {
-				// Redirect the user to the page
-				window.location.href = "https://example.com";
-			} else {
-				// Decrement the number of remaining tries
-				var remainingTries = parseInt(localStorage.getItem("remainingTries") || "3");
-				remainingTries--;
-				
-				// If there are no more tries left, disable the input
-				if (remainingTries == 0) {
-					codeInput.disabled = true;
-				}
-				
-				// Store the remaining tries in localStorage
-				localStorage.setItem("remainingTries", remainingTries.toString());
-				
-				// Show an error message
-				alert("Incorrect code. " + remainingTries + " tries remaining.");
-			}
-		}
-	</script>
+    <title>My Page</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        var codeInput = document.getElementById("code-input");
+        var iframe = document.getElementById("content-iframe");
+        var tries = 0;
+
+        function checkCode() {
+            var code = codeInput.value;
+            if (code === "adamsearlycode") {
+                iframe.style.display = "block";
+                codeInput.style.display = "none";
+            } else {
+                tries++;
+                if (tries >= 3) {
+                    localStorage.setItem("code-disabled", "true");
+                    codeInput.style.display = "none";
+                } else {
+                    alert("Incorrect code. You have " + (3 - tries) + " tries left.");
+                }
+            }
+        }
+    </script>
 </head>
 <body>
-	<h1>Enter the code</h1>
-	<input type="text" id="code-input">
-	<button onclick="checkCode()">Submit</button>
+    <div class="container">
+        <h1>Welcome</h1>
+        <p>Please enter the code to access the content:</p>
+        <input type="text" id="code-input">
+        <button onclick="checkCode()">Submit</button>
+        <iframe id="content-iframe" src="https://www.example.com"></iframe>
+    </div>
 </body>
 </html>
